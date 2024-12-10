@@ -1,4 +1,4 @@
-# Final Project
+# Mica Chapuis - Final Project
 OCN 682 Independent Project by Mica Chapuis
 
 This repository contains 3 folders:
