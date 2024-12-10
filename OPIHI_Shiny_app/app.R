@@ -10,8 +10,6 @@ library(ggmap) # to make map of sites
 library(ggspatial) # to add scale bars and compass arrows
 library(ggrepel) # adding site labels to map
 
-register_google(key = "AIzaSyAUqNs8RxuCcQ29tkCVCPNBEswBtBbJegQ", write = TRUE)
-
 
 ## Define UI for application/dashboard
 ui <- fluidPage(
