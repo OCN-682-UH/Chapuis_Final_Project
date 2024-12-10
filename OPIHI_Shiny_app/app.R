@@ -194,8 +194,8 @@ server <- function(input, output) {
     # create new column with percent cover of each species (points counted for each spp / total points counted that day * 100)
     mutate(spp_percent_cover = ((num_points/total_number_of_tallies)*100))
   
-    # fix species names (replace _ with space)
-    species_data$id <- species_data$id %>% str_replace_all(c("_" = " ")) %>% 
+    # fix species names 
+    species_data$id <- species_data$id %>% str_replace_all(c("_" = " ")) %>% # replace _ with space
       str_to_sentence() # make the first letter uppercase (most are Genus species, some aren't but oh well)
     
     species_data <- species_data %>%
@@ -212,12 +212,14 @@ server <- function(input, output) {
            aes(x = date,
                y = mean_pcover)) +
       facet_wrap(~location) + # facet by location
-      geom_point() + # points
-      geom_line() + # lines
-      theme_minimal() + # theme
+      geom_point() + 
+      geom_line() + 
+      
       labs(x = "Date", # axis titles
            y = "Percent Cover",
            title = paste(input$select_spp1, "Percent Cover over Time in Oʻahu")) + # plot title using the species chosen
+      
+      theme_minimal() + # theme
       theme(title = element_text(size = 16, face = "bold"), # make title bigger and bold
             axis.title = element_text(size = 14), # make axis titles and text bigger
             axis.text = element_text(size = 12),
@@ -227,10 +229,10 @@ server <- function(input, output) {
 # -------------------------------------------  
   ## Categories Percent Cover Plot
 
-  cat_pcover_data <- reactive({
+  cat_pcover_data <- reactive({ # reactive df
     # read in data
     cat_data <- read_csv(here("Data", "opihi_data_clean.csv")) %>%
-      # now group to have one row per category
+      # now group to have one row per category (per site and date, keeping total tallies cause we'll need it later)
       group_by(date, location, category, total_number_of_tallies) %>% 
       # sum all the points recorded for each category
       summarise(cat_sum = sum(num_points, na.rm = TRUE)) %>%
@@ -250,10 +252,12 @@ server <- function(input, output) {
       facet_wrap(~location) + # facet by location
       geom_point() + 
       geom_line() +
-      theme_minimal() +
-      labs(x = "Date",
+      
+      labs(x = "Date", # labels
            y = "Percent Cover",
            title = paste(input$select_cat1, "Percent Cover over Time in Oʻahu")) + # plot title using the category chosen
+      
+      theme_minimal() + # theme
       theme(title = element_text(size = 16, face = "bold"), # make title bigger and bold
             axis.title = element_text(size = 14), # make axis titles and text bigger
             axis.text = element_text(size = 12),
@@ -262,13 +266,13 @@ server <- function(input, output) {
   
 # -------------------------------------------    
     ## Relative Abundance Plot
-  rel_ab_data <- reactive({
+  rel_ab_data <- reactive({ # new reactive df
     # read in data
     rel_ab_data <- read_csv(here("Data", "opihi_data_clean.csv")) %>%
       
       filter(num_points > 0) %>%  # only keep cases when points are positive (there's a few cases were the number of points recorded exceeds the number of points there should be based on the number of quadrats, so when calculate substrate points we get a negative value)
       
-      filter(location %in% input$select_site)  # pick which location to plot
+      filter(location %in% input$select_site)  # pick which location to plot from user input
       
   })
   
@@ -281,19 +285,20 @@ server <- function(input, output) {
                fill= factor(category,levels=c("Red Algae", "Crustose Coralline Algae", "Brown Algae", "Green Algae", "Turf Algae", "Cyanobacteria",  "Coral", "Sessile Invertebrates", "Mobile Invertebrates", "Substrate", "Unknown" )), 
                color= category)) + # set lines surrounding each color to match the fill colors
       geom_bar(stat="identity", position="fill") + # stacked bars
-      
+   
+      labs(x = "Date", # labels
+           y="Relative Abundance",
+           fill = "Category",
+           title = paste("Relative Abundance of Each Category in", input$select_site, "over Time")) + # title using the site chosen by user
+        
       theme_minimal() +  # theme
-      theme(title = element_text(size = 18, face = "bold"),
+      theme(title = element_text(size = 18, face = "bold"), # make title bigger and bold
             axis.title = element_text(size = 16), # make all text bigger
             axis.text = element_text(size = 14),
             legend.title = element_text(size = 16),
             legend.text = element_text(size = 14),
             axis.text.x = element_text(angle= 45, vjust = 1.1, hjust = 1)) + # angle + placement of the date text
-      
-      labs(x = "Date", # labels
-           y="Relative Abundance",
-           fill = "Category",
-           title = paste("Relative Abundance of Each Category in", input$select_site, "over Time")) +
+    
       
       guides(color = "none") + # keep only legend for fill since fill and color are the same
       
