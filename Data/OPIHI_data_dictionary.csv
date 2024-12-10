@@ -1,0 +1,19 @@
+name,full_name,description
+date,Date,Date of survey
+location,Location,Location of survey
+longitude,Longitude,Longitude of survey location
+latitude,Latitude,Latitude of survey location
+start_time,Start Time,Time when survey began
+stop_time,Stop Time,Time when survey stopped
+num_of_t,Number of Transects,Total number of transects surveyed
+transect_length,Transect Length,Length of the transects surveyed in meters
+num_of_quadrats,Number of Quadrats,Total number of quadrats surveyed
+species_count,Number of Species Counted,Total number of species counted within the quadrats
+species_count_2,Number of Species that Appear 2 or More Times,Number of species counted within the quadrats that appeared 2 or more times
+species_count_5,Number of Species that Appear 5 or More Times,Number of species counted within the quadrats that appeared 5 or more times
+simpsons_diversity_index,Simpson's Diversity Index,Simpson's Diversity Index
+number_of_tallies_recorded_species_only,Number of Points recorded that are Species,Number of points surveyed for which a species was recorded
+total_number_of_tallies,Total Number of Points,Total number of points surveyed (25 x Number of Quadrats)
+id,Species ID,Species recorded
+num_points,Number of Points,Number of points surveyed for which the specific species (in Species ID) was recorded
+category,Category,"Species broader category (red, green, brown algae, cyanobacteria, CCA, turf algae, coral, sessile and mobile invertebrates, substrate, unknown)"
